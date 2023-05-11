@@ -25,4 +25,10 @@ inquirer
         }
       }
     },
+    {
+      type: 'list',
+      name: 'shape',
+      message: 'Pick a shape for the logo.',
+      choices: ["circle","triangle","square"]
+    },
   ])
