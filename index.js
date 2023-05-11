@@ -31,4 +31,15 @@ inquirer
       message: 'Pick a shape for the logo.',
       choices: ["circle","triangle","square"]
     },
+    {
+      type: 'input',
+      message: 'Enter a 6 digit hexadecimal code for the shape color.',
+      name: 'shapeColor',
+      validate: function(shpColor)
+      {
+        if(shpColor.length === 6) {
+          return (/^[0-9]+$/).test(shpColor);
+        }
+      }
+    },
   ])
