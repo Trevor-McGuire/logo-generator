@@ -14,4 +14,15 @@ inquirer
         }
       }
     },
+    {
+      type: 'input',
+      message: 'Enter a 6 digit hexadecimal code for the text color.',
+      name: 'textColor',
+      validate: function(charColor)
+      {
+        if(charColor.length === 6) {
+          return (/^[0-9]+$/).test(charColor);
+        }
+      }
+    },
   ])
