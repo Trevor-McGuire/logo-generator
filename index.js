@@ -7,9 +7,9 @@ inquirer
       type: 'input',
       message: 'Enter up to 3 characters.',
       name: 'textI',
-      validate: function(textI)
+      validate: function(input)
       {
-        if(textI.length <= 3) {
+        if(input.length <= 3) {
           return true
         }
       }
@@ -18,12 +18,12 @@ inquirer
       type: 'input',
       message: 'Enter a 6 digit hexadecimal code for the text color.',
       name: 'textColorI',
-      validate: function(textColorI)
+      validate: function(input)
       {
-        if(textColorI.charAt(0) != "#") {
-          textColorI = "#" + textColorI
+        if(input.charAt(0) != "#") {
+          input = "#" + input
         }
-        return (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).test(textColorI);
+        return (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).test(input);
       }
     },
     {
@@ -36,28 +36,35 @@ inquirer
       type: 'input',
       message: 'Enter a 6 digit hexadecimal code for the shape color.',
       name: 'shapeColorI',
-      validate: function(shapeColorI)
+      validate: function(input)
       {
-        if(shapeColorI.length === 6) {
-          return (/^[0-9]+$/).test(shapeColorI);
+        if(input.charAt(0) != "#") {
+          input = "#" + input
         }
+        return (/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/).test(input);
       }
     },
   ])
   .then( function(response) {
-    const {textI,textColorI,shapeI,shapeColorI} = response
     let logoShape = ""
-    switch(shapeI) {
+    if(response.textColorI.charAt(0) != "#") {
+      response.textColorI = "#" + response.textColorI
+    }
+    if(response.shapeColorI.charAt(0) != "#") {
+      response.shapeColorI = "#" + response.shapeColorI
+    }
+    switch(response.shapeI) {
       case "circle":
-        logoShape = `<circle cx="50" cy="50" r="40" stroke-width="0" fill="yellow" />`
+        logoShape = `<circle cx="150" cy="100" r="100" stroke-width="0" fill="${response.shapeColorI}" />`
         break;
       case "square":
-        logoShape = `<rect width="300" height="100" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />`
+        logoShape = `<rect width="200" x="50" height="200" style="fill:${response.shapeColorI};stroke-width:0;" />`
         break;
       case "triangle":
-        logoShape = `<polygon points="200,10 250,190 160,210" style="fill:lime;stroke:purple;stroke-width:1" />`
+        logoShape = `<polygon points="150,0 50,200 250,200" style="fill:${response.shapeColorI};stroke-width:0" />`
     }
-    const logo = `<svg width="100" height="100">${logoShape}</svg>`
+    const text = `<text x="50%" y="150" font-size="90px" dominant-baseline="middle" text-anchor="middle">${response.textI}</text>`
+    const logo = `<svg width="300" height="200">${logoShape}${text}</svg>`
     fs.writeFile('logo.svg', logo, (err) =>
       err ? console.error(err) : console.log('Generated logo.svg')
     )
